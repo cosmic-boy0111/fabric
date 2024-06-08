@@ -36,3 +36,116 @@
     transform: rotate(360deg);
   }
 }
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.fab_container{
+  display: flex;
+}
+
+.fab_action{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fab_action button{
+  margin-bottom: .5rem;
+  margin-left: .5rem;
+  outline: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+}
+
+.icon{
+  background-color: rgba(255, 255, 255, 0.16);
+  padding: .3rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.fab_canvas {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+
+.controls {
+  margin-top: 10px;
+  width: 87%;
+  display: flex;
+  align-self: flex-start;
+  justify-content: space-between;
+}
+
+.controls input, .controls button {
+  margin: 5px;
+}
+
+.right_controls{
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.input_label{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  margin-right: 1rem;
+}
+
+.text_input{
+  border: none;
+  outline: none;
+  padding: .4rem .4rem;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.text_btn{
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: .4rem .4rem;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+@media only screen and (max-width: 905px) {
+  .fab_container{
+    flex-direction: column;
+  }
+
+  .fab_action{
+    flex-direction: row;
+  }
+
+  .fab_action button{
+    margin-left: 0;
+  }
+}
+
+
+.colorpick-eyedropper-input-trigger{
+  display: none;
+}
