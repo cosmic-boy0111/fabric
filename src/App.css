@@ -137,6 +137,29 @@
   color: white;
 }
 
+.label_input{
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin-left: 1rem;
+  margin-bottom: .5rem;
+}
+
+.label_input input{
+  width: 80px;
+}
+
+#fontSelect{
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: white;
+}
+
+#fontSelect option {
+  color: black;
+}
+
 @media only screen and (max-width: 905px) {
 
   .container{

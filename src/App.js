@@ -2,7 +2,7 @@ import './App.css';
 import { fabric } from 'fabric'
 import { useEffect, useRef, useState } from 'react';
 
-import { Brush, CircleOff, CircleX, ImagePlus, Paintbrush, Pencil, RotateCwSquare, ScanSearch, ZoomIn, ZoomOut } from 'lucide-react';
+import { Brush, CircleOff, CircleX, Expand, ImagePlus, Minimize, Paintbrush, Pencil, Pipette, RotateCwSquare, ScanSearch, Trash, Type, ZoomIn, ZoomOut } from 'lucide-react';
 
 
 function App() {
@@ -10,15 +10,24 @@ function App() {
   const canvasRef = useRef(null);
 
   var canvas = null;
+
+  const Fonts = ['Roboto','Rubik','Quicksand']
   
   useEffect(() => {
     canvas = new fabric.Canvas(canvasRef.current);
     canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
 
+    canvas.on('mouse:down', function() {
+      const activeObject = canvas.getActiveObject();
+      console.log(activeObject);
+    });
+
     return () => {
       canvas.dispose();
     };
   }, []);
+
+  
 
   const onImageChange = (e) => {
     const reader = new FileReader();
@@ -67,8 +76,33 @@ function App() {
     canvas.renderAll();
   };
 
+  const unStretch = () => {
+    const activeObject = canvas.getActiveObject();
+    if(activeObject){
+      activeObject.scaleX /= 1.1;
+      activeObject.scaleY /= 1.1;
+    }
+    canvas.renderAll();
+  };
+
   const changeBackgroundColor = (color) => {
     canvas.setBackgroundColor(color, canvas.renderAll.bind(canvas));
+  };
+
+  const changeTextColor = (color) => {
+    const activeObject = canvas.getActiveObject();
+    if(activeObject?.fill){
+      activeObject.set({ fill : color });
+      canvas.renderAll();
+    }
+  };
+
+  const changeTextFont = (font) => {
+    const activeObject = canvas.getActiveObject();
+    if(activeObject){
+      activeObject.set({ fill : activeObject.fill , fontFamily : font });
+      canvas.renderAll();
+    }
   };
 
   const addText = (text) => {
@@ -92,12 +126,24 @@ function App() {
       }
   }
 
+  const Remove = () => {
+    if (canvas) {
+      const activeObject = canvas.getActiveObject();
+      if (activeObject) {
+        canvas.remove(activeObject);
+      }
+    }
+  };
+
   const clearCanvas = () => {
     if (canvas) {
       canvas.clear();
       canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas)); // Optional: reset background color
     }
   };
+
+
+  
 
 
 
@@ -111,8 +157,46 @@ function App() {
               <button onClick={rotateImage}> <div className='icon'> <RotateCwSquare /> </div>  <span> Rotate </span> </button>
               <button onClick={zoomIn}><div className='icon'> <ZoomIn /> </div>  <span> Zoom In </span> </button>
               <button onClick={zoomOut}><div className='icon'> <ZoomOut /> </div>  <span> Zoom Out </span> </button>
-              <button onClick={stretch}><div className='icon'> <ScanSearch /> </div>  <span> Stretch </span> </button>
+              <button onClick={stretch}><div className='icon'> <Expand /> </div>  <span> Stretch </span> </button>
+              <button onClick={unStretch}><div className='icon'> <Minimize /> </div>  <span> Un Stretch </span> </button>
               <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw Toggler </span> </button>
+              <button onClick={Remove}><div className='icon'> <Trash /> </div>  <span> Remove </span> </button>
+              <button>
+                <label htmlFor="textColor" className='input_label' style={{
+                  cursor : 'pointer',
+                }}>
+                  <div className='icon'>
+                    <Pipette />
+                  </div>
+                  <span style={{ fontSize : '14px' }} >Text Color</span>
+                </label>
+                <input
+                  style={{ display:'none' }}
+                  type="color"
+                  id="textColor"
+                  onChange={(e) => changeTextColor(e.target.value)}
+                />
+              </button>
+              <button>
+                <label htmlFor="fontSelect" className='input_label' style={{
+                  cursor : 'pointer',
+                  marginRight:'0'
+                }}>
+                  <div className='icon'>
+                    <Type />
+                  </div>
+                </label>
+                <select id="fontSelect" onChange={(e) => changeTextFont(e.target.value)} value={''} >
+                  <option value="" disabled >Font Type</option>
+                  {
+                    Fonts.map(val => {
+                      return <option key={val} value={val} >
+                                {val}
+                              </option>
+                    })
+                  }
+                </select>
+              </button>
               <button className='clear_btn' onClick={clearCanvas}><div className='icon'> <CircleX /> </div>  <span> Clear Canvas </span> </button>
             </div>
           </div>
