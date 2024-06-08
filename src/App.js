@@ -112,7 +112,7 @@ function App() {
               <button onClick={zoomIn}><div className='icon'> <ZoomIn /> </div>  <span> Zoom In </span> </button>
               <button onClick={zoomOut}><div className='icon'> <ZoomOut /> </div>  <span> Zoom Out </span> </button>
               <button onClick={stretch}><div className='icon'> <ScanSearch /> </div>  <span> Stretch </span> </button>
-              <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw </span> </button>
+              <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw Toggler </span> </button>
               <button className='clear_btn' onClick={clearCanvas}><div className='icon'> <CircleX /> </div>  <span> Clear Canvas </span> </button>
             </div>
           </div>
