@@ -59,11 +59,9 @@ function App() {
 
   const stretch = () => {
     const activeObject = canvas.getActiveObject();
-    if (activeObject && activeObject.type === 'image') {
-      activeObject.scaleX *= 1.1;
-      activeObject.scaleY *= 1.1;
-      canvas.renderAll();
-    }
+    activeObject.scaleX *= 1.1;
+    activeObject.scaleY *= 1.1;
+    canvas.renderAll();
   };
 
   const changeBackgroundColor = (color) => {
