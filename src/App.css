@@ -45,6 +45,7 @@
   align-items: center;
   color: #fff;
   font-size: 16px;
+  margin-left: 8%;
 }
 
 .fab_container{
@@ -55,6 +56,7 @@
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .fab_action button{
@@ -67,6 +69,10 @@
   background-color: transparent;
   color: white;
   cursor: pointer;
+}
+
+.clear_btn{
+  justify-self: flex-end;
 }
 
 .icon{
@@ -88,7 +94,7 @@
 
 .controls {
   margin-top: 10px;
-  width: 87%;
+  width: 85%;
   display: flex;
   align-self: flex-start;
   justify-content: space-between;
@@ -132,6 +138,11 @@
 }
 
 @media only screen and (max-width: 905px) {
+
+  .container{
+    margin-left: 0;
+  }
+
   .fab_container{
     flex-direction: column;
   }

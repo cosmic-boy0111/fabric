@@ -2,18 +2,18 @@ import './App.css';
 import { fabric } from 'fabric'
 import { useEffect, useRef, useState } from 'react';
 
-import { ImagePlus, Paintbrush, RotateCwSquare, ScanSearch, ZoomIn, ZoomOut } from 'lucide-react';
+import { Brush, CircleOff, CircleX, ImagePlus, Paintbrush, Pencil, RotateCwSquare, ScanSearch, ZoomIn, ZoomOut } from 'lucide-react';
 
 
 function App() {
 
   const canvasRef = useRef(null);
-  const [text, setText] = useState('')
 
   var canvas = null;
   
   useEffect(() => {
     canvas = new fabric.Canvas(canvasRef.current);
+    canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
 
     return () => {
       canvas.dispose();
@@ -35,6 +35,7 @@ function App() {
             cornersize: 10,
           });
           canvas.add(image);
+          canvas.isDrawingMode = false;
           canvas.renderAll();
         };
       };
@@ -59,8 +60,10 @@ function App() {
 
   const stretch = () => {
     const activeObject = canvas.getActiveObject();
-    activeObject.scaleX *= 1.1;
-    activeObject.scaleY *= 1.1;
+    if(activeObject){
+      activeObject.scaleX *= 1.1;
+      activeObject.scaleY *= 1.1;
+    }
     canvas.renderAll();
   };
 
@@ -76,11 +79,26 @@ function App() {
       fontSize: 50,
     });
     canvas.add(newText);
+    canvas.isDrawingMode = false;
   };
 
-  const handleCanvasSelection = () => {
-    console.log('click');
+  const Draw = () => {
+      canvas.isDrawingMode = !canvas.isDrawingMode;
+      canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+      if(canvas.isDrawingMode){
+        // Set pencil brush properties
+        canvas.freeDrawingBrush.color = 'black';
+        canvas.freeDrawingBrush.width = 5;
+      }
+  }
+
+  const clearCanvas = () => {
+    if (canvas) {
+      canvas.clear();
+      canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas)); // Optional: reset background color
+    }
   };
+
 
 
   return (
@@ -88,12 +106,14 @@ function App() {
       <header className="App-header">
         <div className="container">
           <div className="fab_container">
-            <canvas ref={canvasRef} width="800" height="600" className='fab_canvas' id="canvas" onClick={handleCanvasSelection}></canvas>
+            <canvas ref={canvasRef} width="800" height="600" className='fab_canvas' id="canvas" ></canvas>
             <div className="fab_action">
               <button onClick={rotateImage}> <div className='icon'> <RotateCwSquare /> </div>  <span> Rotate </span> </button>
               <button onClick={zoomIn}><div className='icon'> <ZoomIn /> </div>  <span> Zoom In </span> </button>
               <button onClick={zoomOut}><div className='icon'> <ZoomOut /> </div>  <span> Zoom Out </span> </button>
               <button onClick={stretch}><div className='icon'> <ScanSearch /> </div>  <span> Stretch </span> </button>
+              <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw </span> </button>
+              <button className='clear_btn' onClick={clearCanvas}><div className='icon'> <CircleX /> </div>  <span> Clear Canvas </span> </button>
             </div>
           </div>
           <div className="controls">
