@@ -2,28 +2,31 @@ import './App.css';
 import { fabric } from 'fabric'
 import { useEffect, useRef, useState } from 'react';
 
-import { Brush, CircleOff, CircleX, Expand, ImagePlus, Minimize, Paintbrush, Pencil, Pipette, RotateCwSquare, ScanSearch, Trash, Type, ZoomIn, ZoomOut } from 'lucide-react';
+import { Brush, CircleOff, CircleX, Eraser, Expand, ImagePlus, Minimize, Paintbrush, Pencil, Pipette, RotateCwSquare, ScanSearch, Trash, Type, ZoomIn, ZoomOut } from 'lucide-react';
 
 
 function App() {
 
   const canvasRef = useRef(null);
+  const [canvas, setCanvas] = useState(null)
+  
 
-  var canvas = null;
+  // var canvas = null;
 
   const Fonts = ['Roboto','Rubik','Quicksand']
   
   useEffect(() => {
-    canvas = new fabric.Canvas(canvasRef.current);
-    canvas.setBackgroundColor('white', canvas.renderAll.bind(canvas));
+    const initCanvas = new fabric.Canvas(canvasRef.current);
+    initCanvas.setBackgroundColor('white', initCanvas.renderAll.bind(initCanvas));
 
-    canvas.on('mouse:down', function() {
-      const activeObject = canvas.getActiveObject();
-      console.log(activeObject);
+    initCanvas.on('mouse:up', function() {
+      initCanvas.isDrawingMode = false;
     });
 
+    setCanvas(initCanvas);
+
     return () => {
-      canvas.dispose();
+      initCanvas.dispose();
     };
   }, []);
 
@@ -99,10 +102,11 @@ function App() {
 
   const changeTextFont = (font) => {
     const activeObject = canvas.getActiveObject();
-    if(activeObject){
-      activeObject.set({ fill : activeObject.fill , fontFamily : font });
-      canvas.renderAll();
+    console.log(activeObject);
+    if(activeObject?.fill){
+      activeObject.set({ fontFamily : font });
     }
+    // canvas.renderAll()
   };
 
   const addText = (text) => {
@@ -111,13 +115,15 @@ function App() {
       top: 200,
       fill: '#000',
       fontSize: 50,
+      fontFamily : ''
     });
     canvas.add(newText);
     canvas.isDrawingMode = false;
+    canvas.renderAll();
   };
 
   const Draw = () => {
-      canvas.isDrawingMode = !canvas.isDrawingMode;
+      canvas.isDrawingMode = true;
       canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
       if(canvas.isDrawingMode){
         // Set pencil brush properties
@@ -125,6 +131,17 @@ function App() {
         canvas.freeDrawingBrush.width = 5;
       }
   }
+
+  const Erase = () => {
+      canvas.isDrawingMode = true;
+      if(canvas.isDrawingMode){
+        canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+        // Set pencil brush properties
+        canvas.freeDrawingBrush.color = canvas.backgroundColor;
+        canvas.freeDrawingBrush.width = 10;
+      }
+  }
+
 
   const Remove = () => {
     if (canvas) {
@@ -159,7 +176,8 @@ function App() {
               <button onClick={zoomOut}><div className='icon'> <ZoomOut /> </div>  <span> Zoom Out </span> </button>
               <button onClick={stretch}><div className='icon'> <Expand /> </div>  <span> Stretch </span> </button>
               <button onClick={unStretch}><div className='icon'> <Minimize /> </div>  <span> Un Stretch </span> </button>
-              <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw Toggler </span> </button>
+              <button onClick={Draw}><div className='icon'> <Brush /> </div>  <span> Draw </span> </button>
+              <button onClick={Erase}><div className='icon'> <Eraser /> </div>  <span> Erase </span> </button>
               <button onClick={Remove}><div className='icon'> <Trash /> </div>  <span> Remove </span> </button>
               <button>
                 <label htmlFor="textColor" className='input_label' style={{
@@ -186,7 +204,7 @@ function App() {
                     <Type />
                   </div>
                 </label>
-                <select id="fontSelect" onChange={(e) => changeTextFont(e.target.value)} value={''} >
+                <select id="fontSelect" onChange={(e) => changeTextFont(e.target.value)}  >
                   <option value="" disabled >Font Type</option>
                   {
                     Fonts.map(val => {
